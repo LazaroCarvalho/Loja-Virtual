@@ -1,0 +1,22 @@
+{
+  "name": "loja-virtual",
+  "version": "1.0.0",
+  "description": "Projeto de construção uma loja virtual utilizando nodeJs.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "loja",
+    "e-commerce"
+  ],
+  "author": "Lázaro Carvalho",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.17.1",
+    "nodemon": "^2.0.1"
+  }
+}
