@@ -1,5 +1,5 @@
 // Importando arquivo.
-const express = require ('express');
+const express = require('express');
 
 // "Instanciando" express.
 const app = express();

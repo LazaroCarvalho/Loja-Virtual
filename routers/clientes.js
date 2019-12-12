@@ -1,56 +1,119 @@
 const express = require('express');
-const router = express.Router();
-const conn = require('../connection.js');
+const conn = require('../connection');
 
-router.get('/', (req, res) => {
+const router = express.Router();
+
+router.get("/", (requisicao, resposta) => {
 
     const sql = "SELECT * FROM clientes";
 
-    conn.query(sql, (erro, result) => {
+    conn.query(sql, (erro, resultado) => {
 
         if(erro)
-            res.json(erro);
+            resposta.json({
+                "Erro" :erro.sqlMessage
+            });
         else
-            res.json(result);
+            resposta.json(resultado);
 
-    });
+    })
 
 });
 
-router.get('/:id', (req, res) => {
+router.get("/:id", (requisicao, resposta) => {
 
-    const idRegistro = req.params.id;
+    let idRegistro = requisicao.params.id;
+
     const sql = "SELECT * FROM clientes WHERE id = " + idRegistro;
 
     conn.query(sql, (erro, resultado) => {
 
-        if (erro)
-            res.send("Erro ao buscar registro");
+        if(erro)
+            resposta.json({
+                "Erro" :erro.sqlMessage
+            });
         else
-            res.json(resultado);
+            resposta.json(resultado);
+
+    })
+
+});
+
+router.post('/', (requisicao, resposta) => {
+
+    let nome = requisicao.body.nome;
+    let idade = requisicao.body.idade;
+    let profissao = requisicao.body.profissao;
+
+    const sql = `INSERT INTO clientes 
+                (nome, idade, profissao)
+                VALUES
+                ('${nome}', ${idade}, '${profissao}')`;
+
+    conn.query(sql, (erro, resultado) => {
+
+        if(erro)
+            resposta.json({
+                "status" : "Erro ao inserir",
+                'script' : sql
+            });
+        else
+            resposta.json({
+                "status" : "inserido com sucesso",
+                "dados" : resultado
+            });
 
     });
 
 });
 
-router.post('/', (req, res) => {
+router.patch('/', (requisicao, resposta) => {
 
-    const nome = req.body.body.nome;
-    const idade = req.body.body.idade;
-    const profissao = req.body.body.profissao;
+    let idRegistro = requisicao.body.id;
+    let nome = requisicao.body.nome;
+    let idade = requisicao.body.idade;
+    let profissao = requisicao.body.profissao;
 
-    const sql = `INSERT INTO clientes 
-                (nome, idade, profissao)
-                VALUES
-                ('${nomeRegistro}', '${idadeRegistro}', '${profissaoRegistro}');`;
-
+    let sql = `UPDATE clientes SET nome = '${nome}',
+                idade = ${idade},
+                profissao = '${profissao}'
+                WHERE id = ${idRegistro}`;
 
     conn.query(sql, (erro, resultado) => {
 
         if(erro)
-            res.json(erro);
+            resposta.json({
+                "status" : "erro",
+                "erro: " : erro.sqlMessage
+            });
         else
-            res.json("Cliente inserido com sucesso");
+            resposta.json({
+                "status" : "sucesso",
+                "dados" : resultado
+            });
+
+    })
+
+});
+
+router.delete('/:id', (requisicao, resposta) => {
+
+    let idRegistro = requisicao.params.id;
+
+    const sql = "DELETE FROM clientes WHERE id = " + idRegistro;
+
+    conn.query(sql, (erro, resultado) => {
+        
+        if(erro)
+            resposta.json({
+                "status" : "erro",
+                "erro" : erro.sqlMessage
+            });
+        else
+            resposta.json({
+                "status" : "sucesso",
+                "resultado" : resultado
+            });
 
     });
 

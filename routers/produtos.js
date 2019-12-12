@@ -1,49 +1,122 @@
 const express = require('express');
+const conn = require('../connection');
+
 const router = express.Router();
 
-const bd = [{
-    "ID" : "1",
-    "Produto" : "Teclado",
-    "Quantidade" : "100"
-},
-{
-    "ID" : "2",
-    "Produto" : "Teclado Supersônico",
-    "Quantidade" : "2"
-}
-];
+router.get("/", (requisicao, resposta) => {
 
-router.get("/", (req, res) => {
-    res.status(200).json({
-        "Status" : "Ok",
-        "Data" : bd
+    const sql = "SELECT * FROM produtos";
+
+    conn.query(sql, (erro, resultado) => {
+
+        if(erro)
+            resposta.json({
+                "Erro" :erro.sqlMessage
+            });
+        else
+            resposta.json(resultado);
+
     })
+
 });
 
-router.get("/:id", (req, res) =>{
-    const id = req.params.id;
-    res.json({
-        "Status" : "Ok",
-        "Dados" : bd[id - 1]
+router.get("/:id", (requisicao, resposta) => {
+
+    let idRegistro = requisicao.params.id;
+
+    const sql = "SELECT * FROM produtos WHERE id = " + idRegistro;
+
+    conn.query(sql, (erro, resultado) => {
+
+        if(erro)
+            resposta.json({
+                "Erro" :erro.sqlMessage
+            });
+        else
+            resposta.json(resultado);
+
     })
+
 });
 
-router.post('/', (req, res) => {
-    const data = req.body;
-    res.status(201).send({
-        "Método" : "Post",
-        "Dados" : data
+router.post('/', (requisicao, resposta) => {
+
+    let nome = requisicao.body.nome;
+    let descricao = requisicao.body.descricao;
+    let preco = requisicao.body.preco;
+
+    const sql = `INSERT INTO produtos 
+                (nome, descricao, preco)
+                VALUES
+                ('${nome}', '${descricao}', ${preco})`;
+
+    conn.query(sql, (erro, resultado) => {
+
+        if(erro)
+            resposta.json({
+                "status" : "Erro ao inserir",
+                'script' : sql
+            });
+        else
+            resposta.json({
+                "status" : "inserido com sucesso",
+                "dados" : resultado
+            });
+
     });
+
 });
 
-router.delete('/:id', (req, res) => {
-    const id = req.params.id;
-    res.status(200).send("Regístro excluido com sucesso");
+router.patch('/', (requisicao, resposta) => {
+
+    let idRegistro = requisicao.body.id;
+    let nome = requisicao.body.nome;
+    let descricao = requisicao.body.descricao;
+    let preco = requisicao.body.preco;
+
+    let sql = `UPDATE produtos SET nome = '${nome}',
+                descricao = '${descricao}',
+                preco = ${preco}
+                WHERE id = ${idRegistro}`;
+
+    conn.query(sql, (erro, resultado) => {
+
+        if(erro)
+            resposta.json({
+                "status" : "erro",
+                "erro: " : erro.sqlMessage
+            });
+        else
+            resposta.json({
+                "status" : "sucesso",
+                "dados" : resultado
+            });
+
+    })
+
 });
 
-router.patch('/:id', (req, res) => {
-    const id = req.params.id;
-    res.status(200).send("Regístro excluido com sucesso");
+router.delete('/:id', (requisicao, resposta) => {
+
+    let idRegistro = requisicao.params.id;
+
+    const sql = "DELETE FROM produtos WHERE id = " + idRegistro;
+
+    conn.query(sql, (erro, resultado) => {
+        
+        if(erro)
+            resposta.json({
+                "status" : "erro",
+                "erro" : erro.sqlMessage
+            });
+        else
+            resposta.json({
+                "status" : "sucesso",
+                "resultado" : resultado
+            });
+
+    });
+
 });
 
 module.exports = router;

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+    <body>
+        <form name="frmformulario" method="get" action="localhost:3000/clientes">
+            <label>Nome: </label>
+            <input name="nome" type="text" id="txt_nome">
+
+            <label>Idade: </label>
+            <input name="idade" type="text" id="txt_idade">
+
+            <label>Profissão: </label>
+            <input name="profissao" type="text" id="txt_profissao">
+
+            <input name="btn_submit" type="submit" id="btn_inserir" value="Inserir">
+        </form>
+        
+        <script src="insertContato.js"></script>
+        <script src="server.js"></script>
+    </body>
+</html>
