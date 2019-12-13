@@ -44,6 +44,8 @@ router.post('/', (requisicao, resposta) => {
     let nome = requisicao.body.nome;
     let idade = requisicao.body.idade;
     let profissao = requisicao.body.profissao;
+    
+    console.log(requisicao.body);
 
     const sql = `INSERT INTO clientes 
                 (nome, idade, profissao)
@@ -55,12 +57,12 @@ router.post('/', (requisicao, resposta) => {
         if(erro)
             resposta.json({
                 "status" : "Erro ao inserir",
-                'script' : sql
+                'script' : erro.sqlMessage
             });
         else
             resposta.json({
                 "status" : "inserido com sucesso",
-                "dados" : resultado
+                "script" : resultado
             });
 
     });

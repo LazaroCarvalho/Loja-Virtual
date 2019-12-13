@@ -1,0 +1,26 @@
+.conteudo {
+    width: 1400px;
+    height: inherit;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container {
+    width: auto;
+    height: auto;
+}
+
+.border-padrao {
+    border: 1px solid black;
+}
+
+.radius-small {
+    border-radius: 10px;
+}
+
+.row-medio {
+    width: 100%;
+}
